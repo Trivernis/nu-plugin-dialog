@@ -3,6 +3,8 @@ use nu_plugin::{LabeledError, Plugin};
 use nu_protocol::{PluginSignature, SyntaxShape};
 
 mod confirm;
+mod prompt;
+mod select;
 
 pub struct DialogPlugin {
     pub(crate) theme: Box<dyn Theme>,
@@ -38,6 +40,26 @@ impl Plugin for DialogPlugin {
                     None,
                 )
                 .category(nu_protocol::Category::Misc),
+            PluginSignature::build("ask select")
+                .usage("Prompt the user with a selection prompt.")
+                .required(
+                    "items",
+                    SyntaxShape::List(Box::new(SyntaxShape::String)),
+                    "The items out of which one can be selected.",
+                )
+                .named(
+                    "prompt",
+                    SyntaxShape::String,
+                    "An optional prompt that can be shown to the user for the selection.",
+                    None,
+                )
+                .named(
+                    "default",
+                    SyntaxShape::Number,
+                    "The default selection.",
+                    None,
+                )
+                .category(nu_protocol::Category::Misc),
         ]
     }
 
@@ -49,6 +71,7 @@ impl Plugin for DialogPlugin {
     ) -> Result<nu_protocol::Value, nu_plugin::LabeledError> {
         match name {
             "ask confirm" => self.confirm(call, input),
+            "ask select" => self.select(call, input),
             "ask" => 
             Err(LabeledError {
                 label: "Missing subcommand".into(),

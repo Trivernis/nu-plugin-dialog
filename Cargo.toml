@@ -11,6 +11,6 @@ name = "nu_plugin_dialog"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-dialoguer = "0.10.4"
+dialoguer = { version = "0.10.4", features = ["fuzzy-select", "completion"] }
 nu-plugin = "0.78.0"
 nu-protocol = "0.78.0"

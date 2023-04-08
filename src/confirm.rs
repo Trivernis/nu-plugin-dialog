@@ -1,7 +1,7 @@
 use nu_plugin::{EvaluatedCall, LabeledError};
 use nu_protocol::Value;
 
-use crate::DialogPlugin;
+use crate::{prompt::UserPrompt, DialogPlugin};
 
 impl DialogPlugin {
     pub(crate) fn confirm(
@@ -18,11 +18,7 @@ impl DialogPlugin {
         if let Some(val) = default_val {
             confirm.default(val);
         }
-        let result = confirm.interact().map_err(|e| LabeledError {
-            label: "Failed to prompt user".into(),
-            msg: e.to_string(),
-            span: Some(call.head),
-        })?;
+        let result = confirm.prompt()?;
 
         Ok(Value::Bool {
             val: result,
