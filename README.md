@@ -1,7 +1,10 @@
 # nu-plugin-dialog
 
+[![asciicast](https://asciinema.org/a/2ZvPHpTgkZFmeId3z01IwQQ6F.svg)](https://asciinema.org/a/2ZvPHpTgkZFmeId3z01IwQQ6F)
+
 This plugin adds more options to prompt for user input to nushell.
 It mainly uses the [dialoguer](https://github.com/console-rs/dialoguer) crate for prompts.
+
 
 ## Example Usage
 
