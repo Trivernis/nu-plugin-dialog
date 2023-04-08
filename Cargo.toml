@@ -2,6 +2,10 @@
 name = "nu_plugin_dialog"
 version = "0.1.0"
 edition = "2021"
+repository = "https://github.com/Trivernis/nu-plugin-dialog"
+description = "A nushell plugin for user interaction"
+authors = ["trivernis <trivernis@proton.me>"]
+license-file = "LICENSE.md"
 
 [[bin]]
 name = "nu_plugin_dialog"
@@ -14,3 +18,17 @@ name = "nu_plugin_dialog"
 dialoguer = { version = "0.10.4", features = ["fuzzy-select", "completion"] }
 nu-plugin = "0.78.0"
 nu-protocol = "0.78.0"
+
+# The profile that 'cargo dist' will build with
+[profile.dist]
+inherits = "release"
+lto = "thin"
+
+# Config for 'cargo dist'
+[workspace.metadata.dist]
+# The preferred cargo-dist version to use in CI (Cargo.toml SemVer syntax)
+cargo-dist-version = "0.0.5"
+# The preferred Rust toolchain to use in CI (rustup toolchain syntax)
+rust-toolchain-version = "1.67.1"
+# Target platforms to build apps for (Rust target-triple syntax)
+targets = ["x86_64-unknown-linux-gnu", "x86_64-apple-darwin", "x86_64-pc-windows-msvc", "aarch64-apple-darwin"]
