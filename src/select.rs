@@ -29,7 +29,7 @@ impl DialogPlugin {
         }
 
         if call.has_flag("abortable") {
-            if let Some(selection) = select.prompt_opt()? {
+            if let Some(selection) = select.ask_opt(call.head)? {
                 let selected_item = options.remove(selection);
 
                 Ok(Value::String {
@@ -40,7 +40,7 @@ impl DialogPlugin {
                 Ok(Value::Nothing { span: call.head })
             }
         } else {
-            let selection = select.prompt()?;
+            let selection = select.ask(call.head)?;
             let selected_item = options.remove(selection);
 
             Ok(Value::String {

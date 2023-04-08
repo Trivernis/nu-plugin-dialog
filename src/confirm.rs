@@ -20,7 +20,7 @@ impl DialogPlugin {
         }
 
         if call.has_flag("abortable") {
-            let result = confirm.prompt_opt()?;
+            let result = confirm.ask_opt(call.head)?;
 
             if let Some(val) = result {
                 Ok(Value::Bool {
@@ -31,7 +31,7 @@ impl DialogPlugin {
                 Ok(Value::Nothing { span: call.head })
             }
         } else {
-            let result = confirm.prompt()?;
+            let result = confirm.ask(call.head)?;
             Ok(Value::Bool {
                 val: result,
                 span: call.head,

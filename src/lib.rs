@@ -3,6 +3,7 @@ use nu_plugin::{LabeledError, Plugin};
 use nu_protocol::{PluginSignature, SyntaxShape};
 
 mod confirm;
+mod password;
 mod prompt;
 mod select;
 
@@ -63,6 +64,25 @@ impl Plugin for DialogPlugin {
                     None,
                 )
                 .category(nu_protocol::Category::Misc),
+            PluginSignature::build("ask password")
+                .usage("Prompt the user with a password input.")
+                .named(
+                    "prompt",
+                    SyntaxShape::String,
+                    "The prompt to this password input",
+                    None,
+                )
+                .switch(
+                    "confirm",
+                    "Prompts the user twice for matching password inputs",
+                    None,
+                )
+                .switch(
+                    "allow-empty",
+                    "Allows the user to input an empty password",
+                    None,
+                )
+                .category(nu_protocol::Category::Misc),
         ]
     }
 
@@ -75,6 +95,7 @@ impl Plugin for DialogPlugin {
         match name {
             "ask confirm" => self.confirm(call, input),
             "ask select" => self.select(call, input),
+            "ask password" => self.password(call, input),
             "ask" => 
             Err(LabeledError {
                 label: "Missing subcommand".into(),

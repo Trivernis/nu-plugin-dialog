@@ -1,4 +1,5 @@
 use dialoguer::{theme::Theme, FuzzySelect, Select};
+use nu_protocol::Span;
 
 use super::{create_labeled_error, UserPrompt};
 
@@ -44,20 +45,20 @@ impl<'a> GenericSelect<'a> {
 impl<'a> UserPrompt for GenericSelect<'a> {
     type Output = usize;
 
-    fn prompt(&self) -> Result<Self::Output, nu_plugin::LabeledError> {
+    fn ask(&self, span: Span) -> Result<Self::Output, nu_plugin::LabeledError> {
         match self {
             GenericSelect::Fuzzy(f) => f.interact(),
             GenericSelect::Normal(n) => n.interact(),
         }
-        .map_err(create_labeled_error)
+        .map_err(|e| create_labeled_error(e, span))
     }
 
-    fn prompt_opt(&self) -> Result<Option<Self::Output>, nu_plugin::LabeledError> {
+    fn ask_opt(&self, span: Span) -> Result<Option<Self::Output>, nu_plugin::LabeledError> {
         match self {
             GenericSelect::Fuzzy(f) => f.interact_opt(),
             GenericSelect::Normal(n) => n.interact_opt(),
         }
-        .map_err(create_labeled_error)
+        .map_err(|e| create_labeled_error(e, span))
     }
 }
 
