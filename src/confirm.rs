@@ -18,11 +18,24 @@ impl DialogPlugin {
         if let Some(val) = default_val {
             confirm.default(val);
         }
-        let result = confirm.prompt()?;
 
-        Ok(Value::Bool {
-            val: result,
-            span: call.head,
-        })
+        if call.has_flag("abortable") {
+            let result = confirm.prompt_opt()?;
+
+            if let Some(val) = result {
+                Ok(Value::Bool {
+                    val,
+                    span: call.head,
+                })
+            } else {
+                Ok(Value::Nothing { span: call.head })
+            }
+        } else {
+            let result = confirm.prompt()?;
+            Ok(Value::Bool {
+                val: result,
+                span: call.head,
+            })
+        }
     }
 }

@@ -28,12 +28,25 @@ impl DialogPlugin {
             select.default(def);
         }
 
-        let selection = select.prompt()?;
-        let selected_item = options.remove(selection);
+        if call.has_flag("abortable") {
+            if let Some(selection) = select.prompt_opt()? {
+                let selected_item = options.remove(selection);
 
-        Ok(Value::String {
-            val: selected_item,
-            span: call.head,
-        })
+                Ok(Value::String {
+                    val: selected_item,
+                    span: call.head,
+                })
+            } else {
+                Ok(Value::Nothing { span: call.head })
+            }
+        } else {
+            let selection = select.prompt()?;
+            let selected_item = options.remove(selection);
+
+            Ok(Value::String {
+                val: selected_item,
+                span: call.head,
+            })
+        }
     }
 }
