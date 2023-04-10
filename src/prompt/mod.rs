@@ -1,6 +1,6 @@
 use std::io;
 
-use dialoguer::Password;
+use dialoguer::{MultiSelect, Password};
 use nu_plugin::LabeledError;
 mod generic_select;
 pub use generic_select::GenericSelect;
@@ -36,6 +36,19 @@ impl<'a> UserPrompt for Password<'a> {
 
     fn ask_opt(&self, span: Span) -> Result<Option<Self::Output>, LabeledError> {
         self.ask(span).map(Option::Some)
+    }
+}
+
+impl<'a> UserPrompt for MultiSelect<'a> {
+    type Output = Vec<usize>;
+
+    fn ask(&self, span: Span) -> Result<Self::Output, LabeledError> {
+        self.interact().map_err(|e| create_labeled_error(e, span))
+    }
+
+    fn ask_opt(&self, span: Span) -> Result<Option<Self::Output>, LabeledError> {
+        self.interact_opt()
+            .map_err(|e| create_labeled_error(e, span))
     }
 }
 

@@ -3,6 +3,7 @@ use nu_plugin::{LabeledError, Plugin};
 use nu_protocol::{PluginSignature, SyntaxShape};
 
 mod confirm;
+mod multiselect;
 mod password;
 mod prompt;
 mod select;
@@ -64,6 +65,27 @@ impl Plugin for DialogPlugin {
                     None,
                 )
                 .category(nu_protocol::Category::Misc),
+            PluginSignature::build("ask multiselect")
+                .usage("Prompt the user with a selection prompt.")
+                .required(
+                    "items",
+                    SyntaxShape::List(Box::new(SyntaxShape::String)),
+                    "The items out of which one can be selected.",
+                )
+                .switch("abortable", "If set users can abort the prompt.", None)
+                .named(
+                    "prompt",
+                    SyntaxShape::String,
+                    "An optional prompt that can be shown to the user for the selection.",
+                    None,
+                )
+                .named(
+                    "default",
+                    SyntaxShape::String,
+                    "The default selections as a comma separated string of indices",
+                    None,
+                )
+                .category(nu_protocol::Category::Misc),
             PluginSignature::build("ask password")
                 .usage("Prompt the user with a password input.")
                 .named(
@@ -95,6 +117,7 @@ impl Plugin for DialogPlugin {
         match name {
             "ask confirm" => self.confirm(call, input),
             "ask select" => self.select(call, input),
+            "ask multiselect" => self.multiselect(call, input),
             "ask password" => self.password(call, input),
             "ask" => 
             Err(LabeledError {
