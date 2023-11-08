@@ -23,19 +23,13 @@ impl DialogPlugin {
             let result = confirm.ask_opt(call.head)?;
 
             if let Some(val) = result {
-                Ok(Value::Bool {
-                    val,
-                    span: call.head,
-                })
+                Ok(Value::bool(val, call.head))
             } else {
-                Ok(Value::Nothing { span: call.head })
+                Ok(Value::nothing(call.head))
             }
         } else {
             let result = confirm.ask(call.head)?;
-            Ok(Value::Bool {
-                val: result,
-                span: call.head,
-            })
+            Ok(Value::bool(result, call.head))
         }
     }
 }

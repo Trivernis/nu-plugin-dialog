@@ -32,21 +32,15 @@ impl DialogPlugin {
             if let Some(selection) = select.ask_opt(call.head)? {
                 let selected_item = options.remove(selection);
 
-                Ok(Value::String {
-                    val: selected_item,
-                    span: call.head,
-                })
+                Ok(Value::string(selected_item, call.head))
             } else {
-                Ok(Value::Nothing { span: call.head })
+                Ok(Value::nothing(call.head))
             }
         } else {
             let selection = select.ask(call.head)?;
             let selected_item = options.remove(selection);
 
-            Ok(Value::String {
-                val: selected_item,
-                span: call.head,
-            })
+            Ok(Value::string(selected_item, call.head))
         }
     }
 }

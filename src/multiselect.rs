@@ -34,7 +34,7 @@ impl DialogPlugin {
             if let Some(selection) = select.ask_opt(call.head)? {
                 Ok(map_selection(selection, options, call.head))
             } else {
-                Ok(Value::Nothing { span: call.head })
+                Ok(Value::nothing(call.head))
             }
         } else {
             let selection = select.ask(call.head)?;
@@ -49,10 +49,7 @@ fn map_selection(selection: Vec<usize>, options: Vec<String>, span: Span) -> Val
         .into_iter()
         .enumerate()
         .filter(|(i, _)| selection.contains(i))
-        .map(|(_, val)| Value::String { val, span })
+        .map(|(_, val)| Value::string(val, span))
         .collect::<Vec<_>>();
-    Value::List {
-        vals: selected_items,
-        span,
-    }
+    Value::list(selected_items, span)
 }

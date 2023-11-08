@@ -19,9 +19,6 @@ impl DialogPlugin {
 
         let password = pw_input.ask(call.head)?;
 
-        Ok(Value::String {
-            val: password,
-            span: call.head,
-        })
+        Ok(Value::string(password, call.head))
     }
 }
